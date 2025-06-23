@@ -321,6 +321,8 @@
             </ul>
         </nav>
     </header>
+    <audio controls id="ClickSound"><source src="medias/ClickSoundEffect.mp3"></audio>
+    <audio controls id="ClickSound2"><source src="medias/ClickSoundEffect2.mp3"></audio>
 
     <section class="hero" id="accueil">
         <div class="hero-content">
@@ -496,9 +498,16 @@
             el.style.transition = 'all 0.6s ease';
             observer.observe(el);
         });
-        var Soundclick = new Audio("ClickSoundEffect.aup3")
-            document.addEventListener("click", function(event) {
-            Soundclick.play()
+        var Soundclick1 = document.getElementById("ClickSound")
+        var Soundclick2 = document.getElementById("ClickSound2")
+        document.addEventListener("click", function(event) {
+            let ChosenNum = Math.random()
+            if (ChosenNum <= 0.5) {
+                Soundclick1.play()
+            } else if (ChosenNum > 0.5) {
+                Soundclick2.play()
+            }
+            
         })
     </script>
 </body>
