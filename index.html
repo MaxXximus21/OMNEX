@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMNEX - Voitures Sportives d'Exception</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            border-bottom: 2px solid #ff6600;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6600, #ff9933);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 102, 0, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #ff6600;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ff6600;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23111" width="1200" height="800"/><path fill="%23ff6600" opacity="0.1" d="M0,400 C300,200 600,600 900,300 C1050,150 1200,400 1200,400 L1200,800 L0,800 Z"/></svg>');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            padding: 2rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffffff, #ff6600);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 102, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #ff6600, #ff3300);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 102, 0, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 102, 0, 0.5);
+        }
+
+        .cars-section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #ff6600, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .car-card {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid #333;
+            position: relative;
+        }
+
+        .car-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(255, 102, 0, 0.2);
+            border-color: #ff6600;
+        }
+
+        .car-image {
+            height: 250px;
+            background: linear-gradient(45deg, #ff6600, #333);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .car-image::before {
+            content: '🏎️';
+            font-size: 6rem;
+            opacity: 0.8;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .car-info {
+            padding: 2rem;
+        }
+
+        .car-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #ff6600;
+        }
+
+        .car-specs {
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .car-price {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff6600;
+            margin-bottom: 1rem;
+        }
+
+        .buy-button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(45deg, #ff6600, #ff3300);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .buy-button:hover {
+            background: linear-gradient(45deg, #ff3300, #ff6600);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 102, 0, 0.3);
+        }
+
+        .features-section {
+            background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .feature {
+            padding: 2rem;
+            background: rgba(255, 102, 0, 0.1);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 102, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 102, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(255, 102, 0, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer {
+            background: #000;
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 2px solid #ff6600;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.2rem; }
+            .nav-links { display: none; }
+            .cars-grid { grid-template-columns: 1fr; }
+            .contact-info { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <!--<audio controls autoplay><source src="sans..mp3" type="audio/mpeg"></audio>-->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">OMNEX</div>
+            <ul class="nav-links">
+                <li><a href="#accueil">Accueil</a></li>
+                <li><a href="#voitures">Nos Voitures</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" id="accueil">
+        <div class="hero-content">
+            <h1>PUISSANCE PURE</h1>
+            <p>Découvrez notre collection exclusive de voitures sportives thermiques d'exception</p>
+            <a href="#voitures" class="cta-button">Découvrir la Collection</a>
+        </div>
+    </section>
+
+    <section class="cars-section" id="voitures">
+        <h2 class="section-title">Nos Modèles d'Exception</h2>
+        <div class="cars-grid">
+            <div class="car-card">
+                <div class="car-image"></div>
+                <div class="car-info">
+                    <h3 class="car-name">OMNEX FURY GT</h3>
+                    <p class="car-specs">V8 Biturbo • 650 CV • 0-100 km/h en 3.2s</p>
+                    <div class="car-price">€145,000</div>
+                    <button class="buy-button">Réserver Maintenant</button>
+                </div>
+            </div>
+
+            <div class="car-card">
+                <div class="car-image"></div>
+                <div class="car-info">
+                    <h3 class="car-name">LIGHTNING RS</h3>
+                    <p class="car-specs">V10 Atmosphérique • 780 CV • 0-100 km/h en 2.9s</p>
+                    <div class="car-price">€189,000</div>
+                    <button class="buy-button">Réserver Maintenant</button>
+                </div>
+            </div>
+
+            <div class="car-card">
+                <div class="car-image"></div>
+                <div class="car-info">
+                    <h3 class="car-name">VENOM TRACK</h3>
+                    <p class="car-specs">V12 Twin-Turbo • 850 CV • 0-100 km/h en 2.6s</p>
+                    <div class="car-price">€275,000</div>
+                    <button class="buy-button">Réserver Maintenant</button>
+                </div>
+            </div>
+
+            <div class="car-card">
+                <div class="car-image"></div>
+                <div class="car-info">
+                    <h3 class="car-name">STORM EDITION</h3>
+                    <p class="car-specs">V8 Superchargé • 720 CV • 0-100 km/h en 3.1s</p>
+                    <div class="car-price">€165,000</div>
+                    <button class="buy-button">Réserver Maintenant</button>
+                </div>
+            </div>
+
+            <div class="car-card">
+                <div class="car-image"></div>
+                <div class="car-info">
+                    <h3 class="car-name">OMNEX DEMON</h3>
+                    <p class="car-specs">V8 Hellcat • 900 CV • 0-100 km/h en 2.4s</p>
+                    <div class="car-price">€320,000</div>
+                    <button class="buy-button">Réserver Maintenant</button>
+                </div>
+            </div>
+
+            <div class="car-card">
+                <div class="car-image"></div>
+                <div class="car-info">
+                    <h3 class="car-name">THUNDER BEAST</h3>
+                    <p class="car-specs">W16 Quad-Turbo • 1200 CV • 0-100 km/h en 2.2s</p>
+                    <div class="car-price">€450,000</div>
+                    <button class="buy-button">Réserver Maintenant</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-section" id="services">
+        <h2 class="section-title">Nos Services Premium</h2>
+        <div class="features-grid">
+            <div class="feature">
+                <div class="feature-icon">🔧</div>
+                <h3>Maintenance Expert</h3>
+                <p>Service technique spécialisé par des mécaniciens certifiés</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🚚</div>
+                <h3>Livraison VIP</h3>
+                <p>Livraison sécurisée à domicile partout en Europe</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📋</div>
+                <h3>Garantie Premium</h3>
+                <p>Garantie constructeur étendue jusqu'à 5 ans</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💎</div>
+                <h3>Personnalisation</h3>
+                <p>Options de personnalisation sur mesure</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer" id="contact">
+        <div class="contact-info">
+            <div class="contact-item">
+                <span>📞</span>
+                <span>+33 1 XX XX XX XX</span>
+            </div>
+            <div class="contact-item">
+                <span>📧</span>
+                <span>contact@omnex.fr</span>
+            </div>
+            <div class="contact-item">
+                <span>📍</span>
+                <span>Banquise, Arctique</span>
+            </div>
+        </div>
+        <p>&copy; 2025 OMNEX . Tous droits réservés. | Puissance • Performance • Prestige</p>
+    </footer>
+
+    <script>
+        // Animation smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animation des boutons d'achat
+        document.querySelectorAll('.buy-button').forEach(button => {
+            button.addEventListener('click', function() {
+                this.innerHTML = 'CONTACTÉ! ✓';
+                this.style.background = 'linear-gradient(45deg, #00ff00, #009900)';
+                setTimeout(() => {
+                    this.innerHTML = 'Réserver Maintenant';
+                    this.style.background = 'linear-gradient(45deg, #ff6600, #ff3300)';
+                }, 2000);
+            });
+        });
+
+        // Effet parallax léger sur le hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Animation d'apparition des éléments
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.car-card, .feature').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+        var Soundclick = new Audio("ClickSoundEffect.aup3")
+            document.addEventListener("click", function(event) {
+            Soundclick.play()
+        })
+    </script>
+</body>
+</html>
