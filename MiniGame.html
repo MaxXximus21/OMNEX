@@ -1,0 +1,270 @@
+// Compteur de tentatives (juste pour frustrer encore plus)
+        document.addEventListener('click', () => {
+            score++;
+            scoreElement.textContent = score;
+        });<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bouton Fuyant</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow: hidden;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 2rem;
+            z-index: 10;
+            position: relative;
+        }
+
+        .fleeing-button {
+            position: absolute;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            user-select: none;
+            white-space: nowrap;
+            transform-origin: center;
+        }
+
+        .fleeing-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .fleeing-button.caught {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            animation: celebration 0.6s ease-in-out;
+        }
+
+        @keyframes celebration {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.2) rotate(-10deg); }
+            50% { transform: scale(1.3) rotate(10deg); }
+            75% { transform: scale(1.2) rotate(-5deg); }
+        }
+
+        .instructions {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            opacity: 0.8;
+            z-index: 10;
+        }
+
+        .score {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">
+        <h1>😈 Le Bouton IMPOSSIBLE à Attraper !</h1>
+        <p>Ce bouton ne se laissera JAMAIS attraper... Essayez pour voir !</p>
+    </div>
+
+    <button class="fleeing-button" id="fleeingBtn">
+        Tu ne m'auras jamais !
+    </button>
+
+    <div class="score">
+        Tentatives: <span id="scoreValue">0</span>
+    </div>
+
+    <div class="instructions">
+        <p>😈 Ce bouton est VRAIMENT impossible à attraper</p>
+        <p>🚫 Aucune technique ne fonctionne - il est invincible !</p>
+    </div>
+
+    <script>
+        const button = document.getElementById('fleeingBtn');
+        const scoreElement = document.getElementById('scoreValue');
+        let score = 0;
+        let isMoving = false;
+
+        // Messages aléatoires pour le bouton
+        const messages = [
+            "Impossible !",
+            "Jamais !",
+            "Tu n'y arriveras JAMAIS !",
+            "Même pas en rêve !",
+            "Trop nul !",
+            "Ahaha, raté !",
+            "Je suis invincible !",
+            "Abandon maintenant !",
+            "C'est peine perdue !",
+            "Tu perds ton temps !",
+            "Aucune chance !",
+            "Mission impossible !",
+            "Tu es trop lent !",
+            "Pathétique !",
+            "Essaie encore... ou pas !",
+            "Je suis inarrêtable !",
+            "Tu vas craquer !",
+            "Donne-toi même pas la peine !",
+            "Tu me fais pitié !",
+            "AHAHAHAHA !"
+        ];
+
+        // Position initiale du bouton
+        function setRandomPosition() {
+            const maxX = window.innerWidth - button.offsetWidth - 50;
+            const maxY = window.innerHeight - button.offsetHeight - 50;
+            
+            const x = Math.random() * maxX + 25;
+            const y = Math.random() * maxY + 25;
+            
+            button.style.left = x + 'px';
+            button.style.top = y + 'px';
+        }
+
+        // Fonction pour faire fuir le bouton (IMPOSSIBLE À ATTRAPER)
+        function fleeFromMouse(mouseX, mouseY) {
+            const buttonRect = button.getBoundingClientRect();
+            const buttonCenterX = buttonRect.left + buttonRect.width / 2;
+            const buttonCenterY = buttonRect.top + buttonRect.height / 2;
+
+            // Distance entre la souris et le bouton
+            const distance = Math.sqrt(
+                Math.pow(mouseX - buttonCenterX, 2) + 
+                Math.pow(mouseY - buttonCenterY, 2)
+            );
+
+            // Zone de fuite très large pour être impossible à attraper
+            const fleeDistance = 200;
+            if (distance < fleeDistance) {
+                // Calculer la direction opposée à la souris
+                const angle = Math.atan2(buttonCenterY - mouseY, buttonCenterX - mouseX);
+                
+                // Distance de fuite massive
+                const fleeAmount = Math.max(300, (fleeDistance - distance) * 5);
+                
+                let newX = buttonCenterX + Math.cos(angle) * fleeAmount;
+                let newY = buttonCenterY + Math.sin(angle) * fleeAmount;
+
+                // Si le bouton va sortir de l'écran, le téléporter de l'autre côté
+                const maxX = window.innerWidth - button.offsetWidth;
+                const maxY = window.innerHeight - button.offsetHeight;
+                
+                if (newX < 0 || newX > maxX) {
+                    newX = newX < 0 ? maxX : 0;
+                }
+                if (newY < 0 || newY > maxY) {
+                    newY = newY < 0 ? maxY : 0;
+                }
+
+                // Téléportation instantanée
+                button.style.transition = 'none';
+                button.style.left = newX + 'px';
+                button.style.top = newY + 'px';
+
+                // Restaurer la transition après téléportation
+                setTimeout(() => {
+                    button.style.transition = 'all 0.1s ease-out';
+                }, 10);
+
+                // Changer le message du bouton
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                button.textContent = randomMessage;
+            }
+        }
+
+        // Écouter les mouvements de souris
+        document.addEventListener('mousemove', (e) => {
+            fleeFromMouse(e.clientX, e.clientY);
+        });
+
+        // Le bouton ne peut JAMAIS être cliqué !
+        button.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Téléportation d'urgence !
+            const maxX = window.innerWidth - button.offsetWidth;
+            const maxY = window.innerHeight - button.offsetHeight;
+            
+            button.style.left = Math.random() * maxX + 'px';
+            button.style.top = Math.random() * maxY + 'px';
+            button.textContent = "NICE TRY! 😂";
+            
+            return false;
+        });
+
+        // Même en cas de clic, on empêche tout
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        });
+
+        // Empêcher le focus sur le bouton
+        button.addEventListener('focus', (e) => {
+            e.preventDefault();
+            button.blur();
+        });
+
+        // Empêcher les touches du clavier
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab' || e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                const maxX = window.innerWidth - button.offsetWidth;
+                const maxY = window.innerHeight - button.offsetHeight;
+                
+                button.style.left = Math.random() * maxX + 'px';
+                button.style.top = Math.random() * maxY + 'px';
+                button.textContent = "Même pas au clavier ! 🤣";
+            }
+        });
+
+        // Repositionner le bouton si la fenêtre change de taille
+        window.addEventListener('resize', () => {
+            setRandomPosition();
+        });
+
+        // Position initiale
+        setRandomPosition();
+
+        // Effet de tremblement aléatoire + messages provocateurs
+        setInterval(() => {
+            const currentX = parseInt(button.style.left) || 0;
+            const currentY = parseInt(button.style.top) || 0;
+            
+            // Petit mouvement aléatoire pour être encore plus agaçant
+            button.style.left = (currentX + (Math.random() - 0.5) * 20) + 'px';
+            button.style.top = (currentY + (Math.random() - 0.5) * 20) + 'px';
+            
+            // Message provocateur aléatoire
+            if (Math.random() < 0.3) {
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                button.textContent = randomMessage;
+            }
+        }, 1500);
+    </script>
+</body>
+</html>
